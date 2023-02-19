@@ -32,7 +32,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
     @Shadow public abstract void disconnect(Component p_10054_);
     @Shadow @Final
     static Logger LOGGER;
-    @Shadow @Final private byte[] challenge;
+    @Shadow @Final private byte[] nonce;
     private int velocityLoginMessageId = -1; // Paper - Velocity support
 
     private static boolean isValidUsername(String p_203793_) {
@@ -53,7 +53,7 @@ public abstract class ServerLoginPacketListenerImplMixin {
             Validate.validState(isValidUsername(this.gameProfile.getName()), "Invalid characters in username");
             if (this.server.usesAuthentication() && !this.connection.isMemoryConnection()) {
                 this.state = ServerLoginPacketListenerImpl.State.KEY;
-                this.connection.send(new ClientboundHelloPacket("", this.server.getKeyPair().getPublic().getEncoded(), this.challenge));
+                this.connection.send(new ClientboundHelloPacket("", this.server.getKeyPair().getPublic().getEncoded(), this.nonce));
             } else {
                 // Paper start - Velocity support
                 if (VelocityModernForwardingConfig.isEnabled()) {
